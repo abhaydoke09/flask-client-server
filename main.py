@@ -28,8 +28,10 @@ def get_command_output():
         description: Commands not found
     """
     fi = request.args.get('filename')
-    
-    commands = session.query(Command)
+
+    commands = session.query(Command).all()
+
+    print "####",commands
 
     # TODO: format the query result
     # return jsonify(commands)
@@ -52,18 +54,22 @@ def process_commands():
       200:
         description: Processing OK
     """
-    print request.args.get('filename')
+    #print request.args.get('filename')
     fi = request.args.get('filename')
 
-    queue = Queue()
-    get_valid_commands(queue, fi)
-    processes = [Process(target=process_command_output, args=(queue,))
-                 for num in range(2)]
-    for process in processes:
-        process.start()
-    for process in processes:
-        process.join()
-    return 'Successfully processed commands.'
+    if fi:
+        queue = Queue()
+
+        get_valid_commands(queue, fi)
+        processes = [Process(target=process_command_output, args=(queue,))
+                     for num in range(2)]
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
+        return 'Successfully processed commands.'
+    else:
+        return 'Filename not given'
 
 
 @app.route('/database', methods=['POST'])

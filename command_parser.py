@@ -2,6 +2,7 @@
 Handles the work of validating and processing command input.
 """
 import os
+from RunCmd import RunCmd
 
 
 def get_valid_commands(queue, fi):
@@ -28,11 +29,11 @@ def get_valid_commands(queue, fi):
 
     for command in command_list:
     	if command in valid_commands:
-    		print command
+    		#print command
     		queue.put(command)
 
-    print valid_commands
-    print command_list
+    #print valid_commands
+    #print command_list
     
     
 
@@ -40,3 +41,8 @@ def get_valid_commands(queue, fi):
 def process_command_output(queue):
     # TODO: run the command and put its data in the db
     command = queue.get()
+    
+    command_executer = RunCmd([command],60)
+    command_executer.Run()
+    print 'Command --> ',command
+    print command_executer.output,command_executer.err,command_executer.time
