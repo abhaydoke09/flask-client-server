@@ -62,4 +62,3 @@ When you're done, host it and send us the link of where it's at!
 1. `make run` to start the project; see the `Makefile` for other helpful things like `make swagger` and `make style`
 2. You can then hit it to either drop the db, init the db, fetch results, input data (curl or python requests).
    - Sample request to feed in the data: requests.post("http://127.0.0.1:8080/commands", params={'filename': 'commands.txt'})
-# flask-client-server

@@ -26,10 +26,15 @@ def get_valid_commands(queue, fi):
     except EnvironmentError as e:
     	print e
 
+    for command in command_list:
+    	if command in valid_commands:
+    		print command
+    		queue.put(command)
+
     print valid_commands
     print command_list
     
-    queue.put(command)
+    
 
 
 def process_command_output(queue):
