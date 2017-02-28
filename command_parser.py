@@ -5,8 +5,7 @@ import os
 from RunCmd import RunCmd
 from base import Base, Command
 from db import session, engine
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm import sessionmaker
+
 
 def get_valid_commands(queue, fi):
     # TODO: efficiently evaluate commands
@@ -53,16 +52,19 @@ def process_command_output(queue):
     
     record = Command(command_string=command,length=len(command),duration=round(command_executer.time),output=command_executer.output)
     print "record -->",record.command_string
-
+    #session = Session()
     session.add(record)
-    print session.query(Command).all()
-    session.commit()
-    
+
+    #print session.query(Command).all()
+    #session.commit()
+    #session.flush()
+    #session.remove()
     #mysession.commit()
     #mysession.remove()
-    print "####DOne"
-    #for instance in mysession.query(Command).order_by(Command.id):
-    #    print(instance.command_string, instance.output)
     
+    print "####DOne"
+    for instance in session.query(Command).order_by(Command.id):
+        print(instance.command_string, instance.output)
+    #Session.remove()
 
 

@@ -1,4 +1,5 @@
 [COMMAND LIST]
+grep "ls" commands.txt
 ls
 pwd
 echo "hello there"

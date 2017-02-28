@@ -7,8 +7,6 @@ from multiprocessing import Process, Queue
 import sys
 from flask import Flask, request, jsonify
 from flask_swagger import swagger
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm import sessionmaker
 
 from db import session, engine
 from base import Base, Command
@@ -33,15 +31,16 @@ def get_command_output():
 
     #fi = request.args.get('filename')
     #mysession = Session()
+    #session = Session()
     commands = session.query(Command).all()
     #commands = session.query(Command).all()
-    record_list = []
     print "####",commands
+    record_list = []
     for instance in session.query(Command).group_by(Command.command_string):
         record_list.append({'command_string':instance.command_string, 'length':instance.length,'duration':instance.duration,'output':instance.output})
     return jsonify(results = record_list)
-    return 'Successfully processed commands.'
-
+    #return 'Successfully processed commands.'
+    #Session.remove()
     # TODO: format the query result
     # return jsonify(commands)
 
@@ -91,7 +90,9 @@ def make_db():
       200:
         description: DB Creation OK
     """
+    
     Base.metadata.create_all(engine)
+    
     
     return 'Database creation successful.'
 
@@ -107,6 +108,7 @@ def drop_db():
         description: DB table drop OK
     """
     Base.metadata.drop_all(engine)
+
     return 'Database deletion successful.'
 
 
