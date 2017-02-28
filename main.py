@@ -35,10 +35,11 @@ def get_command_output():
     #mysession = Session()
     commands = session.query(Command).all()
     #commands = session.query(Command).all()
+    record_list = []
     print "####",commands
-    for instance in session.query(Command).order_by(Command.id):
-        print(instance.command_string, instance.output)
-    
+    for instance in session.query(Command).group_by(Command.command_string):
+        record_list.append({'command_string':instance.command_string, 'length':instance.length,'duration':instance.duration,'output':instance.output})
+    return jsonify(results = record_list)
     return 'Successfully processed commands.'
 
     # TODO: format the query result
@@ -74,7 +75,7 @@ def process_commands():
             process.start()
         for process in processes:
             process.join()
-        
+
         return 'Successfully processed commands.'
     else:
         return 'Filename not given'
