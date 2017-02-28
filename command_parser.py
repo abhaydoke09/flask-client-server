@@ -3,7 +3,10 @@ Handles the work of validating and processing command input.
 """
 import os
 from RunCmd import RunCmd
-
+from base import Base, Command
+from db import session, engine
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import sessionmaker
 
 def get_valid_commands(queue, fi):
     # TODO: efficiently evaluate commands
@@ -46,3 +49,20 @@ def process_command_output(queue):
     command_executer.Run()
     print 'Command --> ',command
     print command_executer.output,command_executer.err,command_executer.time
+
+    
+    record = Command(command_string=command,length=len(command),duration=round(command_executer.time),output=command_executer.output)
+    print "record -->",record.command_string
+
+    session.add(record)
+    print session.query(Command).all()
+    session.commit()
+    
+    #mysession.commit()
+    #mysession.remove()
+    print "####DOne"
+    #for instance in mysession.query(Command).order_by(Command.id):
+    #    print(instance.command_string, instance.output)
+    
+
+

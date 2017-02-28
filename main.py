@@ -7,6 +7,8 @@ from multiprocessing import Process, Queue
 import sys
 from flask import Flask, request, jsonify
 from flask_swagger import swagger
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import sessionmaker
 
 from db import session, engine
 from base import Base, Command
@@ -27,11 +29,17 @@ def get_command_output():
       400:
         description: Commands not found
     """
-    fi = request.args.get('filename')
+    
 
+    #fi = request.args.get('filename')
+    #mysession = Session()
     commands = session.query(Command).all()
-
+    #commands = session.query(Command).all()
     print "####",commands
+    for instance in session.query(Command).order_by(Command.id):
+        print(instance.command_string, instance.output)
+    
+    return 'Successfully processed commands.'
 
     # TODO: format the query result
     # return jsonify(commands)
@@ -59,7 +67,6 @@ def process_commands():
 
     if fi:
         queue = Queue()
-
         get_valid_commands(queue, fi)
         processes = [Process(target=process_command_output, args=(queue,))
                      for num in range(2)]
@@ -67,6 +74,7 @@ def process_commands():
             process.start()
         for process in processes:
             process.join()
+        
         return 'Successfully processed commands.'
     else:
         return 'Filename not given'
@@ -83,6 +91,7 @@ def make_db():
         description: DB Creation OK
     """
     Base.metadata.create_all(engine)
+    
     return 'Database creation successful.'
 
 
