@@ -1,3 +1,8 @@
+'''
+RunCmd class has cmd,timeout,output,err,time variables. 
+Its run method executes the command specified in cmd variable using subprocess.Popen() method.
+Command execution is aborted if it takes more than 60 seconds.
+'''
 import subprocess as sub
 import threading
 import commands
