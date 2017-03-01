@@ -92,7 +92,8 @@ def make_db():
     """
     
     Base.metadata.create_all(engine)
-    
+    f = open('reload.py','wb')
+    f.close()
     
     return 'Database creation successful.'
 

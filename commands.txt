@@ -1,8 +1,8 @@
 [COMMAND LIST]
 grep "ls" commands.txt
+echo "hello there"
 ls
 pwd
-echo "hello there"
 grep "ls" commands.txt
 grep "pwd" commands.txt
 grep "pwd" commands.txt
