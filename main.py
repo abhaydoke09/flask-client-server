@@ -32,7 +32,10 @@ def get_command_output():
     #fi = request.args.get('filename')
     #mysession = Session()
     #session = Session()
-    commands = session.query(Command).all()
+    try:
+        commands = session.query(Command).all()
+    except:
+        return "No table found"
     #commands = session.query(Command).all()
     print "####",commands
     record_list = []
@@ -65,6 +68,7 @@ def process_commands():
     #print request.args.get('filename')
     fi = request.args.get('filename')
 
+
     if fi:
         queue = Queue()
         get_valid_commands(queue, fi)
@@ -74,7 +78,7 @@ def process_commands():
             process.start()
         for process in processes:
             process.join()
-
+        
         return 'Successfully processed commands.'
     else:
         return 'Filename not given'
@@ -109,7 +113,8 @@ def drop_db():
         description: DB table drop OK
     """
     Base.metadata.drop_all(engine)
-
+    f = open('reload.py','wb')
+    f.close()
     return 'Database deletion successful.'
 
 

@@ -43,7 +43,11 @@ def get_valid_commands(queue, fi):
 def process_command_output(queue):
     # TODO: run the command and put its data in the db
     command = queue.get()
-    
+    try:
+        commands = session.query(Command).all()
+    except:
+        return "No table found"
+        
     command_executer = RunCmd([command],60)
     command_executer.Run()
     print 'Command --> ',command
@@ -65,6 +69,7 @@ def process_command_output(queue):
     print "####DOne"
     for instance in session.query(Command).order_by(Command.id):
         print(instance.command_string, instance.output)
+
     #Session.remove()
 
 
